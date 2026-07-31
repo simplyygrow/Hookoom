@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SimplyyGrow × Hookoom — AI Video Production Proposal</title>
+<style>
+
+/* ============ FONTS (system-installed) ============ */
+/* Display: Lora (serif, warm, editorial) · Body: Poppins (clean geometric) · Utility: DejaVu Sans Mono (ticket data) */
+
+/* ============ TOKENS ============ */
+:root{
+  --ink:#102227;            /* deep petrol-navy ink */
+  --petrol:#0E5C56;         /* primary teal */
+  --petrol-deep:#0A3D3A;
+  --petrol-pale:#DCEAE6;
+  --parchment:#F6F1E2;      /* warm travel-document paper */
+  --parchment-2:#EFE7D2;
+  --paper:#FFFDF7;
+  --brick:#A8402F;          /* stamp-ink red */
+  --brass:#B98A2E;          /* gold thread / route line */
+  --success:#1F7A5B;
+  --line:rgba(16,34,39,0.14);
+  --line-soft:rgba(16,34,39,0.08);
+  --ink-70:rgba(16,34,39,0.72);
+  --ink-50:rgba(16,34,39,0.5);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:297mm;background:var(--paper);}
+body{
+  font-family:"Poppins",sans-serif;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+@page{ size:297mm 210mm; margin:0; }
+
+.slide{
+  width:297mm;
+  height:210mm;
+  position:relative;
+  overflow:hidden;
+  page-break-after:always;
+  break-after:page;
+  background:var(--paper);
+}
+.slide:last-child{page-break-after:auto;}
+
+/* ---------- perforation rail : signature device, right edge of every content page ---------- */
+.perf-rail{
+  position:absolute; top:0; right:9mm; bottom:0; width:0;
+  border-right:1.6px dashed rgba(16,34,39,0.22);
+}
+.perf-rail::before,.perf-rail::after{
+  content:""; position:absolute; right:-4.5px; width:9px; height:9px; border-radius:50%;
+  background:var(--paper); border:1.2px solid rgba(16,34,39,0.22);
+}
+.perf-rail::before{ top:-4.5px; }
+.perf-rail::after{ bottom:-4.5px; }
+
+/* ---------- stamp seal (signature mark) ---------- */
+.seal{ display:inline-flex; }
+.seal-ring{fill:none;stroke:currentColor;stroke-width:1.3;}
+.seal-ring.dash{stroke-dasharray:3 2.4;}
+.seal-core{fill:currentColor;stroke:none;}
+
+/* ---------- ticket sequence footer ---------- */
+.seq{
+  position:absolute; right:16mm; bottom:9mm;
+  font-family:"DejaVu Sans Mono",monospace; font-size:8.5px; letter-spacing:.08em;
+  color:var(--ink-50); text-transform:uppercase;
+}
+.seq b{color:var(--ink); font-weight:700;}
+
+/* ---------- shared eyebrow / label ---------- */
+.route-label{
+  font-family:"DejaVu Sans Mono",monospace; font-size:9px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--petrol); font-weight:700; display:flex; align-items:center; gap:8px;
+}
+.route-label.on-dark{ color:#8FD9CB; }
+
+/* icons */
+.icon{width:20px;height:20px;stroke:var(--ink);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.icon.on-parchment{stroke:var(--petrol);}
+.icon.on-dark{stroke:var(--parchment);}
+
+/* =========================================================
+   SLIDE 1 — COVER  ("boarding pass" hero)
+   ========================================================= */
+.cover{
+  background:
+    radial-gradient(circle at 88% 8%, rgba(185,138,46,0.16), transparent 40%),
+    linear-gradient(160deg,var(--ink) 0%, var(--petrol-deep) 62%, #0B2A28 100%);
+  color:var(--parchment);
+  padding:16mm 0 0 0;
+  display:flex; flex-direction:column;
+}
+.cover-map{position:absolute; inset:0; opacity:.5;}
+.cover-top{ padding:0 20mm; display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:2;}
+.wordmark{display:flex;align-items:center;gap:10px;}
+.wordmark .name{font-family:"Lora";font-weight:600;font-size:16px;letter-spacing:.01em;color:var(--parchment);}
+.wordmark .name b{color:#8FD9CB;}
+.doc-code{font-family:"DejaVu Sans Mono";font-size:9px;letter-spacing:.12em;color:rgba(246,241,226,.55);text-transform:uppercase;text-align:right;line-height:1.8;}
+
+.ticket{
+  position:relative; z-index:2; margin:12mm 20mm 0; flex:1;
+  display:flex; align-items:stretch;
+  border:1px solid rgba(246,241,226,.22); border-radius:6px;
+  background:rgba(255,253,247,0.03);
+}
+.ticket-main{ flex:1; padding:11mm 14mm 12mm; display:flex; flex-direction:column; justify-content:space-between; }
+.route-line{display:flex; align-items:center; gap:14px; margin:14px 0 4px;}
+.route-city{font-family:"DejaVu Sans Mono"; font-size:13px; letter-spacing:.1em; color:var(--parchment); font-weight:700;}
+.route-path{flex:1; position:relative; height:14px; display:flex; align-items:center;}
+.route-path .line{position:absolute; left:0; right:0; top:50%; height:0; border-top:1.4px dashed rgba(143,217,203,.55);}
+.route-path svg{position:relative; z-index:2; margin-left:auto; margin-right:auto; width:20px; height:20px; stroke:#8FD9CB; fill:none; stroke-width:1.6;}
+
+.cover-title{ font-family:"Lora"; font-weight:500; font-size:50px; line-height:1.08; letter-spacing:-0.01em; margin-top:10px; color:var(--parchment);}
+.cover-title em{font-style:italic; color:#B7DED4;}
+.cover-sub{margin-top:16px; font-size:12.5px; line-height:1.75; color:rgba(246,241,226,.72); max-width:150mm;}
+.cover-sub b{color:var(--parchment); font-weight:600;}
+
+.ticket-stub{
+  width:56mm; flex:none; border-left:1.6px dashed rgba(246,241,226,.3);
+  padding:11mm 10mm; display:flex; flex-direction:column; justify-content:space-between;
+  position:relative;
+}
+.ticket-stub::before,.ticket-stub::after{
+  content:""; position:absolute; left:-6px; width:12px; height:12px; border-radius:50%;
+  background:var(--ink); border:1px solid rgba(246,241,226,.22);
+}
+.ticket-stub::before{top:-6px;} .ticket-stub::after{bottom:-6px;}
+.stub-field{margin-bottom:10px;}
+.stub-field .k{font-family:"DejaVu Sans Mono"; font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:rgba(246,241,226,.45);}
+.stub-field .v{font-family:"Lora"; font-size:13.5px; color:var(--parchment); margin-top:4px;}
+.stamp-badge{
+  align-self:flex-end; width:26mm; height:26mm; border-radius:50%; border:1.6px dashed var(--brick);
+  color:var(--brick); background:rgba(168,64,47,.06); display:flex; align-items:center; justify-content:center;
+  text-align:center; transform:rotate(-14deg); font-family:"DejaVu Sans Mono"; font-size:8px; font-weight:700;
+  letter-spacing:.05em; text-transform:uppercase; line-height:1.4; padding:3mm;
+}
+
+.cover-bottom{ position:relative; z-index:2; padding:7mm 20mm 9mm; display:flex; justify-content:space-between; align-items:center; border-top:1px dashed rgba(246,241,226,.18); margin-top:8mm;}
+.cover-line{font-family:"Lora"; font-style:italic; font-weight:500; font-size:14.5px; color:#DCEFE9;}
+.cover-meta{display:flex; gap:22px;}
+.cover-meta div{font-family:"DejaVu Sans Mono"; font-size:8.5px; color:rgba(246,241,226,.5); letter-spacing:.08em; text-transform:uppercase;}
+.cover-meta div span{display:block; color:var(--parchment); font-size:11px; margin-top:4px; letter-spacing:0; font-family:"Poppins";}
+
+/* =========================================================
+   GENERIC CONTENT FRAME — "document page"
+   ========================================================= */
+.content{ background:var(--paper); padding:14mm 26mm 13mm 20mm; height:100%; display:flex; flex-direction:column; position:relative;}
+.content-header{ display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1.4px solid var(--ink); padding-bottom:8mm; margin-bottom:10mm;}
+.content-header .htitle{font-family:"Lora"; font-weight:500; font-size:27px; letter-spacing:-0.01em; margin-top:8px; color:var(--ink);}
+.folio-stamp{ text-align:right; }
+.folio-stamp .f1{font-family:"DejaVu Sans Mono"; font-size:9px; color:var(--ink-50); letter-spacing:.1em; text-transform:uppercase;}
+.folio-stamp .f2{font-family:"Lora"; font-weight:600; font-size:13px; color:var(--ink); margin-top:3px;}
+
+/* =========================================================
+   SLIDE 2 — OBJECTIVE  (passport declaration page)
+   ========================================================= */
+.obj-body{display:flex; gap:16mm; flex:1;}
+.obj-lead{flex:1.4;}
+.obj-lead .lead-quote{font-family:"Lora"; font-weight:400; font-style:italic; font-size:21px; line-height:1.5; color:var(--petrol-deep);}
+.obj-lead .lead-body{margin-top:15px; font-size:12px; line-height:1.85; color:var(--ink-70); max-width:148mm;}
+.obj-lead .lead-body b{color:var(--ink); font-weight:600;}
+.obj-lead .lead-body + .lead-body{margin-top:10px;}
+
+.obj-goals{flex:1; display:flex; flex-direction:column; gap:7mm; border-left:1.4px dashed var(--line); padding-left:14mm; justify-content:center;}
+.goal-row{display:flex; align-items:flex-start; gap:13px;}
+.goal-seal{
+  width:34px; height:34px; border-radius:50%; border:1.4px dashed var(--petrol); flex:none;
+  display:flex; align-items:center; justify-content:center; color:var(--petrol);
+  font-family:"DejaVu Sans Mono"; font-size:11px; font-weight:700; transform:rotate(-6deg);
+}
+.goal-row:nth-child(2) .goal-seal{ transform:rotate(4deg); }
+.goal-row:nth-child(3) .goal-seal{ transform:rotate(-3deg); }
+.goal-row h4{font-family:"Lora"; font-weight:600; font-size:16px; margin-bottom:3px; color:var(--ink);}
+.goal-row p{font-size:10.5px; color:var(--ink-70); line-height:1.6; max-width:72mm;}
+
+/* =========================================================
+   SLIDE 3 — PACKAGES  (two boarding-pass tickets)
+   ========================================================= */
+.pkg-row{display:flex; gap:12mm; flex:1; align-items:stretch;}
+.pkg-ticket{
+  flex:1; border-radius:8px; border:1.4px solid var(--line); display:flex; flex-direction:column;
+  background:var(--parchment); position:relative; overflow:hidden;
+}
+.pkg-ticket.priority{ background:linear-gradient(165deg,var(--ink),var(--petrol-deep) 70%); color:var(--parchment); border-color:rgba(246,241,226,.16);}
+.pkg-tag{
+  position:absolute; top:9mm; right:-9.5mm; background:var(--brick); color:#fff; font-family:"DejaVu Sans Mono";
+  font-size:8px; letter-spacing:.1em; text-transform:uppercase; padding:4px 34px; font-weight:700; transform:rotate(38deg);
+  box-shadow:0 3px 8px rgba(0,0,0,.18);
+}
+.pkg-head{padding:9mm 10mm 8mm;}
+.pkg-class{font-family:"DejaVu Sans Mono"; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--petrol); font-weight:700;}
+.pkg-ticket.priority .pkg-class{color:#8FD9CB;}
+.pkg-title{font-family:"Lora"; font-weight:500; font-size:22px; margin-top:5px; color:var(--ink);}
+.pkg-ticket.priority .pkg-title{color:var(--parchment);}
+.pkg-price{display:flex; align-items:baseline; gap:7px; margin-top:12px;}
+.pkg-price .amt{font-family:"DejaVu Sans Mono"; font-weight:700; font-size:30px; letter-spacing:-0.01em;}
+.pkg-price .per{font-size:10.5px; color:var(--ink-50);}
+.pkg-ticket.priority .pkg-price .per{color:rgba(246,241,226,.55);}
+
+.pkg-perf{ position:relative; height:0; border-top:1.6px dashed rgba(16,34,39,.28); margin:0 10mm;}
+.pkg-ticket.priority .pkg-perf{ border-top-color:rgba(246,241,226,.22); }
+.pkg-perf::before,.pkg-perf::after{content:""; position:absolute; top:-6px; width:12px; height:12px; border-radius:50%; background:var(--paper);}
+.pkg-perf::before{left:-16px;} .pkg-perf::after{right:-16px;}
+
+.pkg-body{padding:8mm 10mm 9mm; flex:1; display:flex; flex-direction:column;}
+.pkg-list{list-style:none; display:flex; flex-direction:column; gap:9px; flex:1;}
+.pkg-list li{display:flex; align-items:center; gap:10px; font-size:11.5px;}
+.pkg-list .chk{width:16px;height:16px;flex:none;border-radius:50%;background:rgba(31,122,91,.14);display:flex;align-items:center;justify-content:center;}
+.pkg-list .chk svg{width:9px;height:9px;stroke:var(--success);stroke-width:2.6;fill:none;}
+.pkg-ticket.priority .pkg-list .chk{background:rgba(143,217,203,.16);}
+.pkg-ticket.priority .pkg-list .chk svg{stroke:#8FD9CB;}
+.pkg-mention{margin-top:14px; padding-top:10px; border-top:1px dotted var(--line); font-size:10px; color:var(--ink-50); line-height:1.6; font-style:italic; font-family:"Lora";}
+.pkg-ticket.priority .pkg-mention{border-top-color:rgba(246,241,226,.18); color:rgba(246,241,226,.55);}
+
+/* =========================================================
+   SLIDE 4 — VIDEO TYPES  (luggage-tag cards)
+   ========================================================= */
+.vt-row{display:flex; gap:11mm; flex:1; align-items:stretch;}
+.vt-card{
+  flex:1; border-radius:6px; padding:0; border:1.4px solid var(--line); background:var(--parchment);
+  display:flex; flex-direction:column; position:relative;
+}
+.vt-tag-hole{position:absolute; top:8mm; left:50%; transform:translateX(-50%); width:11px; height:11px; border-radius:50%; background:var(--paper); border:1.2px solid var(--line);}
+.vt-head{ padding:15mm 9mm 8mm; text-align:center; border-bottom:1.6px dashed var(--line);}
+.vt-icon{width:40px;height:40px;border-radius:50%; border:1.4px solid var(--petrol); background:var(--paper); display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
+.vt-card h3{font-family:"Lora"; font-weight:600; font-size:17px; color:var(--ink);}
+.vt-card .vt-sub{font-size:9px; color:var(--petrol); font-family:"DejaVu Sans Mono"; letter-spacing:.08em; margin-top:5px; text-transform:uppercase; font-weight:700;}
+.vt-list{list-style:none; display:flex; flex-direction:column; gap:9px; margin:0; padding:9mm 9mm 10mm; flex:1; justify-content:center;}
+.vt-list li{font-size:11px; color:var(--ink-70); display:flex; align-items:center; gap:9px;}
+.vt-list li::before{content:""; width:5px; height:5px; border-radius:50%; background:var(--brass); flex:none;}
+
+/* =========================================================
+   SLIDE 5 — DELIVERABLES  (customs manifest)
+   ========================================================= */
+.dlv-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:6mm 8mm; flex:1; align-content:center;}
+.dlv-card{
+  border:1.2px solid var(--line); border-radius:4px; padding:7mm 8mm;
+  background:var(--parchment); display:flex; align-items:center; gap:12px;
+}
+.dlv-num{font-family:"DejaVu Sans Mono"; font-size:9px; color:var(--ink-50);}
+.dlv-check{width:28px;height:28px;border-radius:50%; border:1.3px dashed var(--success); background:rgba(31,122,91,.08); display:flex;align-items:center;justify-content:center;flex:none;}
+.dlv-check svg{width:14px;height:14px;stroke:var(--success);stroke-width:2.2;fill:none;}
+.dlv-card h4{font-family:"Lora"; font-weight:600; font-size:14px; color:var(--ink);}
+
+/* =========================================================
+   SLIDE 6 — WORKFLOW  (flight route map)
+   ========================================================= */
+.flow-wrap{flex:1; display:flex; flex-direction:column; justify-content:center;}
+.flow-track{position:relative; display:flex; justify-content:space-between; margin-top:4mm;}
+.flow-track::before{content:""; position:absolute; top:17px; left:18px; right:18px; height:0; border-top:1.4px dashed rgba(16,34,39,.28);}
+.flow-step{position:relative; display:flex; flex-direction:column; align-items:center; width:14%;}
+.flow-dot{
+  width:35px;height:35px;border-radius:50%; background:var(--paper); color:var(--ink);
+  display:flex;align-items:center;justify-content:center; font-family:"DejaVu Sans Mono"; font-weight:700; font-size:11px;
+  border:1.6px solid var(--ink); position:relative; z-index:2;
+}
+.flow-step:nth-child(4) .flow-dot{background:var(--petrol); border-color:var(--petrol); color:#fff;}
+.flow-step h5{font-family:"Lora"; font-weight:600; font-size:13px; margin-top:12px; color:var(--ink);}
+.flow-step p{font-size:9px; color:var(--ink-50); text-align:center; margin-top:4px; line-height:1.5; max-width:33mm;}
+
+.flow-note{margin-top:13mm; display:flex; gap:14mm; border-top:1.4px solid var(--ink); padding-top:8mm;}
+.flow-note div{flex:1;}
+.flow-note h6{font-family:"DejaVu Sans Mono"; font-size:8.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--petrol); margin-bottom:6px; font-weight:700;}
+.flow-note p{font-size:10.5px; color:var(--ink-70); line-height:1.7;}
+
+/* =========================================================
+   SLIDE 7 — WHY SIMPLYYGROW  (a page of visa stamps)
+   ========================================================= */
+.why-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:8mm; flex:1; align-content:center;}
+.why-card{
+  border:1.4px dashed var(--line); border-radius:50%/18px; padding:9mm 7mm; background:var(--parchment);
+  text-align:center; position:relative;
+}
+.why-card:nth-child(odd){ transform:rotate(-1.6deg); }
+.why-card:nth-child(even){ transform:rotate(1.4deg); }
+.why-icon{width:36px;height:36px;border-radius:50%;border:1.3px solid var(--ink); display:flex;align-items:center;justify-content:center;margin:0 auto 10px; background:var(--paper);}
+.why-card h4{font-family:"Lora"; font-weight:600; font-size:13px; line-height:1.35; color:var(--ink);}
+.why-card.dark{ background:linear-gradient(160deg,var(--ink),var(--petrol-deep)); border:1.4px solid rgba(246,241,226,.2);}
+.why-card.dark .why-icon{background:rgba(246,241,226,.1); border-color:rgba(246,241,226,.4);}
+.why-card.dark h4{color:var(--parchment);}
+
+/* =========================================================
+   SLIDE 8 — CLOSE  (boarding complete)
+   ========================================================= */
+.close{
+  background:
+    radial-gradient(circle at 12% 92%, rgba(185,138,46,0.14), transparent 40%),
+    linear-gradient(165deg,var(--ink) 0%, var(--petrol-deep) 60%, #0B2A28 100%);
+  color:var(--parchment); padding:18mm 20mm; display:flex; flex-direction:column; justify-content:space-between;
+}
+.close-top{position:relative; z-index:2; display:flex; justify-content:space-between;}
+.close-mid{position:relative; z-index:2; text-align:center; margin-top:2mm;}
+.close-mid .route-label{justify-content:center; margin-bottom:10px;}
+.close-title{font-family:"Lora"; font-weight:400; font-style:italic; font-size:60px; color:var(--parchment);}
+.close-sub{margin-top:12px; font-size:12px; color:rgba(246,241,226,.65);}
+.close-stamp{
+  margin:14px auto 0; width:30mm; height:30mm; border-radius:50%; border:1.6px dashed var(--brick);
+  color:#D98C7C; display:flex; align-items:center; justify-content:center; text-align:center;
+  font-family:"DejaVu Sans Mono"; font-size:8.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  line-height:1.5; padding:3mm; transform:rotate(-8deg);
+}
+.close-bottom{position:relative; z-index:2; display:flex; justify-content:space-between; align-items:flex-end; border-top:1px dashed rgba(246,241,226,.2); padding-top:9mm;}
+.close-brand{display:flex; align-items:center; gap:10px;}
+.close-brand div .n{font-family:"Lora"; font-weight:600; font-size:15px; color:var(--parchment);}
+.close-brand div .t{font-family:"DejaVu Sans Mono"; font-size:8.5px; letter-spacing:.1em; text-transform:uppercase; color:rgba(246,241,226,.5); margin-top:2px;}
+.close-contact{display:flex; gap:20px;}
+.close-contact div{font-family:"DejaVu Sans Mono"; font-size:8.5px; color:rgba(246,241,226,.45); letter-spacing:.06em; text-transform:uppercase;}
+.close-contact div span{display:block; color:var(--parchment); font-size:11px; margin-top:5px; font-family:"Poppins"; letter-spacing:0;}
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- SLIDE 1 : COVER — BOARDING PASS                               -->
+<!-- ============================================================ -->
+<section class="slide cover">
+  <svg class="cover-map" viewBox="0 0 900 636" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#8FD9CB" stroke-width="0.5" opacity="0.35" fill="none">
+      <path d="M60 520 Q 240 300 420 380 T 780 160"/>
+      <path d="M100 120 Q 340 200 500 120 T 820 300"/>
+      <circle cx="60" cy="520" r="3" fill="#8FD9CB"/>
+      <circle cx="420" cy="380" r="3" fill="#8FD9CB"/>
+      <circle cx="780" cy="160" r="3" fill="#8FD9CB"/>
+      <circle cx="100" cy="120" r="3" fill="#8FD9CB"/>
+      <circle cx="500" cy="120" r="3" fill="#8FD9CB"/>
+      <circle cx="820" cy="300" r="3" fill="#8FD9CB"/>
+    </g>
+  </svg>
+
+  <div class="cover-top">
+    <div class="wordmark">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="14.5" stroke="#8FD9CB" stroke-width="1"/>
+        <circle cx="16" cy="16" r="8.5" stroke="#B98A2E" stroke-width="1" stroke-dasharray="1.6 3.2"/>
+        <circle cx="16" cy="16" r="2.2" fill="#8FD9CB"/>
+      </svg>
+      <div class="name">Simplyy<b>Grow</b></div>
+    </div>
+    <div class="doc-code">Partnership Proposal · Document SG&#8209;H26<br>Prepared 31 July 2026</div>
+  </div>
+
+  <div class="ticket">
+    <div class="ticket-main">
+      <div>
+        <div class="route-label on-dark"><svg width="13" height="13" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#8FD9CB" fill="none" stroke-width="1.4"/><circle cx="12" cy="12" r="2" fill="#8FD9CB"/></svg>AI VIDEO PRODUCTION · PARTNERSHIP PROPOSAL</div>
+        <div class="route-line">
+          <div class="route-city">SMPG</div>
+          <div class="route-path">
+            <div class="line"></div>
+            <svg viewBox="0 0 24 24"><path d="M2 16l20-6-6 8M2 16l6 2 3-3M2 16l3 6 3-3"/></svg>
+          </div>
+          <div class="route-city">HKM</div>
+        </div>
+        <h1 class="cover-title">A Story Worth<br><em>Trusting</em></h1>
+        <p class="cover-sub">Prepared exclusively for <b>Hookoom</b> — a partnership to design and produce a continuous pipeline of AI‑powered cinematic content for India's Trust‑First Travel Platform.</p>
+      </div>
+    </div>
+    <div class="ticket-stub">
+      <div>
+        <div class="stub-field"><div class="k">Passenger / Client</div><div class="v">Hookoom</div></div>
+        <div class="stub-field"><div class="k">Carrier / Studio</div><div class="v">SimplyyGrow</div></div>
+        <div class="stub-field"><div class="k">Document Class</div><div class="v">Proposal v1.0</div></div>
+      </div>
+      <div class="stamp-badge">Trust<br>Verified<br>Content</div>
+    </div>
+  </div>
+
+  <div class="cover-bottom">
+    <div class="cover-line">"Creating AI‑powered brand stories that build trust."</div>
+    <div class="cover-meta">
+      <div>Prepared For<span>Hookoom</span></div>
+      <div>Prepared By<span>SimplyyGrow</span></div>
+      <div>Route<span>Concept → Delivery</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 2 : OBJECTIVE                                           -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="perf-rail"></div>
+  <div class="content">
+    <div class="content-header">
+      <div>
+        <div class="route-label"><svg width="13" height="13" viewBox="0 0 24 24" stroke="#0E5C56" fill="none" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="2" fill="#0E5C56" stroke="none"/></svg>01 — DECLARATION OF INTENT</div>
+        <div class="htitle">Why this partnership, why now</div>
+      </div>
+      <div class="folio-stamp"><div class="f1">SimplyyGrow</div><div class="f2">for Hookoom</div></div>
+    </div>
+
+    <div class="obj-body">
+      <div class="obj-lead">
+        <p class="lead-quote">India's travel landscape rewards platforms that earn confidence before they earn a booking.</p>
+        <p class="lead-body">Hookoom's opportunity is to become recognised as <b>India's Trust‑First Travel Platform</b> — and the fastest way to build that reputation is by putting the right story in front of the right audience, consistently. SimplyyGrow will design and produce a continuous pipeline of AI‑generated cinematic video content built to raise awareness of Hookoom, educate travellers on what sets the platform apart, and turn everyday viewers into advocates of a brand they trust.</p>
+        <p class="lead-body">Every video in this proposal is built around one idea: <b>trust is designed, not claimed.</b> Cinematic quality, honest storytelling and disciplined consistency are how that trust compounds, month over month.</p>
+      </div>
+      <div class="obj-goals">
+        <div class="goal-row"><div class="goal-seal">01</div><div><h4>Awareness</h4><p>Introduce Hookoom to new audiences and build category‑level recognition.</p></div></div>
+        <div class="goal-row"><div class="goal-seal">02</div><div><h4>Education</h4><p>Explain what makes Hookoom different — clearly, visually, memorably.</p></div></div>
+        <div class="goal-row"><div class="goal-seal">03</div><div><h4>Trust</h4><p>Establish Hookoom as India's Trust‑First Travel Platform through consistent storytelling.</p></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="seq">Doc <b>SG-H26</b> · Page 02 / 08</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 3 : PACKAGES                                            -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="perf-rail"></div>
+  <div class="content">
+    <div class="content-header">
+      <div>
+        <div class="route-label"><svg width="13" height="13" viewBox="0 0 24 24" stroke="#0E5C56" fill="none" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="2" fill="#0E5C56" stroke="none"/></svg>02 — TWO TICKETS TO BOARD</div>
+        <div class="htitle">Two ways to begin the partnership</div>
+      </div>
+      <div class="folio-stamp"><div class="f1">Monthly Retainers</div><div class="f2">Billed in INR</div></div>
+    </div>
+
+    <div class="pkg-row">
+      <div class="pkg-ticket">
+        <div class="pkg-head">
+          <div class="pkg-class">Starter Class</div>
+          <div class="pkg-title">Starter</div>
+          <div class="pkg-price"><span class="amt">₹17,500</span><span class="per">/ month</span></div>
+        </div>
+        <div class="pkg-perf"></div>
+        <div class="pkg-body">
+          <ul class="pkg-list">
+            <li><span class="chk"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>3 Awareness Videos</li>
+            <li><span class="chk"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>3 USP Videos</li>
+            <li><span class="chk"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>1 Brand Story Video</li>
+          </ul>
+          <div class="pkg-mention">Best for early‑stage brand awareness and consistent content.</div>
+        </div>
+      </div>
+
+      <div class="pkg-ticket priority">
+        <div class="pkg-tag">Priority</div>
+        <div class="pkg-head">
+          <div class="pkg-class">Growth Class</div>
+          <div class="pkg-title">Growth</div>
+          <div class="pkg-price"><span class="amt">₹29,999</span><span class="per">/ month</span></div>
+        </div>
+        <div class="pkg-perf"></div>
+        <div class="pkg-body">
+          <ul class="pkg-list">
+            <li><span class="chk"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>5 Awareness Videos</li>
+            <li><span class="chk"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>5 USP Videos</li>
+            <li><span class="chk"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>2 Brand Story Videos</li>
+          </ul>
+          <div class="pkg-mention">Best for aggressive brand growth and product education.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="seq">Doc <b>SG-H26</b> · Page 03 / 08</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 4 : VIDEO TYPES                                         -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="perf-rail"></div>
+  <div class="content">
+    <div class="content-header">
+      <div>
+        <div class="route-label"><svg width="13" height="13" viewBox="0 0 24 24" stroke="#0E5C56" fill="none" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="2" fill="#0E5C56" stroke="none"/></svg>03 — CONTENT MANIFEST</div>
+        <div class="htitle">Three formats, one narrative arc</div>
+      </div>
+      <div class="folio-stamp"><div class="f1">Content Pillars</div><div class="f2">Awareness · USP · Story</div></div>
+    </div>
+
+    <div class="vt-row">
+      <div class="vt-card">
+        <div class="vt-tag-hole"></div>
+        <div class="vt-head">
+          <div class="vt-icon"><svg class="icon on-parchment" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 15 0 010 18M3 12h18"/></svg></div>
+          <h3>Awareness Videos</h3>
+          <div class="vt-sub">Top of Funnel</div>
+        </div>
+        <ul class="vt-list">
+          <li>Educate the audience</li>
+          <li>Create curiosity</li>
+          <li>Build trust</li>
+          <li>Industry awareness</li>
+        </ul>
+      </div>
+      <div class="vt-card">
+        <div class="vt-tag-hole"></div>
+        <div class="vt-head">
+          <div class="vt-icon"><svg class="icon on-parchment" viewBox="0 0 24 24"><path d="M4 20l4-11 4 11M6.5 13h3M14 9l3-6 3 6M14 20l3-6 3 6"/></svg></div>
+          <h3>USP Videos</h3>
+          <div class="vt-sub">Feature Education</div>
+        </div>
+        <ul class="vt-list">
+          <li>Creator Economy</li>
+          <li>Verified Reviews</li>
+          <li>Hotel Benefits</li>
+          <li>AI Features</li>
+        </ul>
+      </div>
+      <div class="vt-card">
+        <div class="vt-tag-hole"></div>
+        <div class="vt-head">
+          <div class="vt-icon"><svg class="icon on-parchment" viewBox="0 0 24 24"><path d="M12 21s-7-4.35-9.5-8.5C.5 8.5 3 5 6.5 5c2 0 3.5 1.2 4.5 2.5C12 6.2 13.5 5 15.5 5 19 5 21.5 8.5 20.5 12.5 18 16.65 12 21 12 21z"/></svg></div>
+          <h3>Brand Story Videos</h3>
+          <div class="vt-sub">Emotional Connection</div>
+        </div>
+        <ul class="vt-list">
+          <li>Founder Vision</li>
+          <li>Brand Philosophy</li>
+          <li>Trust</li>
+          <li>Indian Hospitality</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="seq">Doc <b>SG-H26</b> · Page 04 / 08</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 5 : DELIVERABLES                                        -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="perf-rail"></div>
+  <div class="content">
+    <div class="content-header">
+      <div>
+        <div class="route-label"><svg width="13" height="13" viewBox="0 0 24 24" stroke="#0E5C56" fill="none" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="2" fill="#0E5C56" stroke="none"/></svg>04 — DECLARED INCLUSIONS</div>
+        <div class="htitle">Included in every production</div>
+      </div>
+      <div class="folio-stamp"><div class="f1">End‑to‑End</div><div class="f2">Nothing outsourced</div></div>
+    </div>
+
+    <div class="dlv-grid">
+      <div class="dlv-card"><div class="dlv-check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><div><div class="dlv-num">01</div><h4>Script Writing</h4></div></div>
+      <div class="dlv-card"><div class="dlv-check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><div><div class="dlv-num">02</div><h4>Creative Direction</h4></div></div>
+      <div class="dlv-card"><div class="dlv-check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><div><div class="dlv-num">03</div><h4>AI Visual Production</h4></div></div>
+      <div class="dlv-card"><div class="dlv-check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><div><div class="dlv-num">04</div><h4>Professional Voiceover</h4></div></div>
+      <div class="dlv-card"><div class="dlv-check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><div><div class="dlv-num">05</div><h4>Video Editing</h4></div></div>
+      <div class="dlv-card"><div class="dlv-check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><div><div class="dlv-num">06</div><h4>Sound Design</h4></div></div>
+      <div class="dlv-card"><div class="dlv-check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><div><div class="dlv-num">07</div><h4>Motion Graphics</h4></div></div>
+      <div class="dlv-card"><div class="dlv-check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><div><div class="dlv-num">08</div><h4>4K Delivery</h4></div></div>
+      <div class="dlv-card"><div class="dlv-check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div><div><div class="dlv-num">09</div><h4>Commercial Usage</h4></div></div>
+    </div>
+  </div>
+  <div class="seq">Doc <b>SG-H26</b> · Page 05 / 08</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 6 : WORKFLOW                                            -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="perf-rail"></div>
+  <div class="content">
+    <div class="content-header">
+      <div>
+        <div class="route-label"><svg width="13" height="13" viewBox="0 0 24 24" stroke="#0E5C56" fill="none" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="2" fill="#0E5C56" stroke="none"/></svg>05 — FLIGHT PATH</div>
+        <div class="htitle">A disciplined seven‑stage pipeline</div>
+      </div>
+      <div class="folio-stamp"><div class="f1">Predictable</div><div class="f2">Delivery cadence</div></div>
+    </div>
+
+    <div class="flow-wrap">
+      <div class="flow-track">
+        <div class="flow-step"><div class="flow-dot">01</div><h5>Research</h5><p>Audience &amp; category insight</p></div>
+        <div class="flow-step"><div class="flow-dot">02</div><h5>Script</h5><p>Narrative &amp; messaging</p></div>
+        <div class="flow-step"><div class="flow-dot">03</div><h5>Storyboard</h5><p>Shot‑by‑shot direction</p></div>
+        <div class="flow-step"><div class="flow-dot">04</div><h5>AI Production</h5><p>Cinematic generation</p></div>
+        <div class="flow-step"><div class="flow-dot">05</div><h5>Voiceover</h5><p>Professional narration</p></div>
+        <div class="flow-step"><div class="flow-dot">06</div><h5>Editing</h5><p>Pacing, sound &amp; motion</p></div>
+        <div class="flow-step"><div class="flow-dot">07</div><h5>Delivery</h5><p>4K, ready to publish</p></div>
+      </div>
+      <div class="flow-note">
+        <div><h6>Cadence</h6><p>Each cycle runs on a monthly rhythm, so Hookoom always has a predictable stream of finished, on‑brand videos ready for every channel.</p></div>
+        <div><h6>Oversight</h6><p>A single creative lead carries every video from research through delivery, keeping tone, pacing and quality consistent across the pipeline.</p></div>
+        <div><h6>Ownership</h6><p>Hookoom reviews scripts and storyboards before production begins, so there are no surprises at final delivery.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="seq">Doc <b>SG-H26</b> · Page 06 / 08</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 7 : WHY SIMPLYYGROW                                     -->
+<!-- ============================================================ -->
+<section class="slide">
+  <div class="perf-rail"></div>
+  <div class="content">
+    <div class="content-header">
+      <div>
+        <div class="route-label"><svg width="13" height="13" viewBox="0 0 24 24" stroke="#0E5C56" fill="none" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="2" fill="#0E5C56" stroke="none"/></svg>06 — VISA OF CAPABILITY</div>
+        <div class="htitle">The partner behind the pipeline</div>
+      </div>
+      <div class="folio-stamp"><div class="f1">Capability</div><div class="f2">Built for scale</div></div>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#102227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.2 6.8H21l-5.6 4.1 2.2 6.8L12 15.6l-5.6 4.1 2.2-6.8L3 8.8h6.8z"/></svg></div><h4>AI‑first production</h4></div>
+      <div class="why-card"><div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#102227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg></div><h4>Fast delivery</h4></div>
+      <div class="why-card"><div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#102227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6a2 2 0 012-2h8l6 6v9a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M14 4v6h6"/></svg></div><h4>Brand‑focused storytelling</h4></div>
+      <div class="why-card"><div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#102227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="14" height="10" rx="2"/><path d="M17 10l4-2v8l-4-2"/></svg></div><h4>Premium cinematic visuals</h4></div>
+      <div class="why-card"><div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#102227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.4"/><rect x="14" y="3" width="7" height="7" rx="1.4"/><rect x="3" y="14" width="7" height="7" rx="1.4"/><rect x="14" y="14" width="7" height="7" rx="1.4"/></svg></div><h4>Scalable content pipeline</h4></div>
+      <div class="why-card"><div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#102227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5.5c0-1.9-2.2-3-5-3s-5 1.3-5 3 2.2 2.7 5 3 5 1.1 5 3-2.2 3-5 3-5-1.1-5-3"/></svg></div><h4>Affordable production</h4></div>
+      <div class="why-card"><div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#102227" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v-3a8 8 0 0116 0v3"/><path d="M4 15a2 2 0 002 2h1v-5H5a1 1 0 00-1 1zM20 15a2 2 0 01-2 2h-1v-5h1a1 1 0 011 1z"/><path d="M9 20h6"/></svg></div><h4>Dedicated creative support</h4></div>
+      <div class="why-card dark">
+        <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#F6F1E2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 15 0 010 18M3 12h18"/></svg></div>
+        <h4>One partner, every stage of the story.</h4>
+      </div>
+    </div>
+  </div>
+  <div class="seq">Doc <b>SG-H26</b> · Page 07 / 08</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 8 : CLOSE                                               -->
+<!-- ============================================================ -->
+<section class="slide close">
+  <div class="close-top">
+    <div class="wordmark">
+      <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="14.5" stroke="#8FD9CB" stroke-width="1"/>
+        <circle cx="16" cy="16" r="2.2" fill="#8FD9CB"/>
+      </svg>
+      <div class="name">Simplyy<b>Grow</b></div>
+    </div>
+    <div class="doc-code">AI Video Production Proposal<br>Prepared for Hookoom</div>
+  </div>
+
+  <div class="close-mid">
+    <div class="route-label on-dark">07 — JOURNEY COMPLETE</div>
+    <h2 class="close-title">Thank You</h2>
+    <p class="close-sub">We're looking forward to building Hookoom's next chapter of trust, one story at a time.</p>
+    <div class="close-stamp">Boarding<br>Confirmed</div>
+  </div>
+
+  <div class="close-bottom">
+    <div class="close-brand">
+      <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="14.5" stroke="#8FD9CB" stroke-width="1"/>
+        <circle cx="16" cy="16" r="2.2" fill="#8FD9CB"/>
+      </svg>
+      <div><div class="n">SimplyyGrow</div><div class="t">AI Content Production Partner</div></div>
+    </div>
+    <div class="close-contact">
+      <div>Website<span>www.simplyygrow.com</span></div>
+      <div>Phone<span>+91 00000 00000</span></div>
+      <div>Email<span>hello@simplyygrow.com</span></div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
